@@ -50,8 +50,10 @@ namespace MassTransit.DESagaRepository
 
         public static T Get<T>(this IDbConnection db, Guid id, IDbTransaction transaction = null, int? commandTimeout = null) where T:class
         {
-            Console.WriteLine("Get {0}", id);
-            return DapperExtensions.DapperExtensions.Get<T>(db, id, transaction, commandTimeout);
+            Console.Write("Get {0} . . . ", id);
+            var t = DapperExtensions.DapperExtensions.Get<T>(db, id, transaction, commandTimeout);
+            Console.WriteLine("{0}", t == null ? "Nothing found" : t.ToString());
+            return t;
         }
 
         public static IEnumerable<T> GetList<T>(this IDbConnection db, IDbTransaction transaction = null, int? commandTimeout = null) where T : class

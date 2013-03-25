@@ -48,7 +48,7 @@ namespace SagaRunner
             var guid = Guid.NewGuid();
             Bus.Instance.Publish(new NoddyMessageImpl { CorrelationId = guid, Text = "Lets go to the playground" });
 
-            Thread.Sleep(TimeSpan.FromSeconds(1));
+            Thread.Sleep(TimeSpan.FromSeconds(10));
             Bus.Instance.Publish(new BigEarsMessageImpl { CorrelationId = guid, Text = "then lets go to the bakery" });
 
             Console.WriteLine("Press any key to continue");
@@ -75,9 +75,7 @@ CREATE TABLE [dbo].[NoddySaga]
     [NoddyText] [nvarchar](50) NULL,
     [BigEarText] [nvarchar](255) NULL,
     [ReadyFlags] [int] not NULL,
-    [StateEnter] [nvarchar](255) NULL,
-    [StateLeave] [nvarchar](255) NULL,
-    [StateName] [nvarchar](255) NULL,
+    [CurrentState] [nvarchar](255) NULL,
 PRIMARY KEY (CorrelationId)
 )
 create unique index NoddySaga_pk on NoddySaga (CorrelationId)");

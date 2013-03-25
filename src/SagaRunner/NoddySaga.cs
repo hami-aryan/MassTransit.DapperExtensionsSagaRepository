@@ -31,9 +31,8 @@ namespace SagaRunner
             Map(s => s.CorrelationId).Column("CorrelationId").Key(DapperExtensions.Mapper.KeyType.Assigned);
             Map(s => s.NoddyText).Column("NoddyText");
             Map(s => s.BigEarText).Column("BigEarText");
-            Map(s => s.CurrentState.Enter.Name).Column("StateEnter");
-            Map(s => s.CurrentState.Leave.Name).Column("StateLeave");
-            Map(s => s.CurrentState.Name).Column("StateName");
+            Map(s => s.ReadyFlags).Column("ReadyFlags");
+            Map(s => s.CurrentStateName).Column("CurrentState");
         }
     }
 
@@ -79,6 +78,7 @@ namespace SagaRunner
                         );
                 });
         }
+
         public static State Initial { get; set; }
         public static State Open { get; set; }
         public static State Completed { get; set; }
@@ -108,7 +108,17 @@ namespace SagaRunner
 
         public override string ToString()
         {
-            return "Id " + CorrelationId.ToString() + " NoddyText = '" + NoddyText + "' BigEarText = '" + BigEarText + "'";
+            return "Id " + CorrelationId.ToString() + " NoddyText = '" + NoddyText + "' BigEarText = '" + BigEarText + "' CurrentState '" + CurrentStateName + "'";
+        }
+
+        public string CurrentStateName
+        {
+            get { return CurrentState.Name; }
+            set
+            {
+                if (CurrentState.Name != value)
+                    base.ChangeCurrentState(new State<NoddySaga>(value));
+            }
         }
     }
 }
